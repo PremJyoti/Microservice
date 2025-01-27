@@ -18,8 +18,13 @@ public class StudentImpl {
     private StudentRepo studentRepo;
 
     public Student setStudent(Student st){
-        Student saveSt = studentRepo.save(st);
-        return saveSt;
+        Optional<Student> studById = studentRepo.findByStudentRollNumber(st.getStudentRollNumber());
+        if(studById.isPresent()){
+            throw new StudentException("Student with ID already exists");
+        }else {
+            Student saveSt = studentRepo.save(st);
+            return saveSt;
+        }
     }
 
     public Student getStudentById(int id){
